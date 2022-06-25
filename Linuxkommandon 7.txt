@@ -1,0 +1,88 @@
+#################################################################################
+Filrättigheter:
+#################################################################################
+
+Filrättigheter kan uppdateras via kommando chmod (change mode), vilket fungerar både för filer och kataloger. 
+Som exempel, för att göra en fil döpt main.c läsbar, skrivbar samt körbar för alla, kan följande kommando användas:
+----------------------------------------------------------------------------------------------------
+$ sudo chmod a+rwx main.c
+----------------------------------------------------------------------------------------------------
+
+där
+   a = all => filrättigheterna gäller alla
+   + = lägga till / utöka rättigheter
+   r = read => ger läsrättigheter
+   w = write => ger skrivrättigheter
+   x = execute => ger rättigheter att köra filen, behövs enbart för program och script
+
+Filrättigheter kan tas bort så att enbart super user (sudo) får åtkomst till filen genom att
+ersätta plustecknet med ett minustecken:
+----------------------------------------------------------------------------------------------------
+$ sudo chmod a-rwx main.c
+----------------------------------------------------------------------------------------------------
+
+Det är möjligt att ge rättigheter enbart till specifika grupper via följande flaggor:
+
+   a = all => alla (användes ovan)
+   u = user => nuvarande användare
+   g = group => medlemmar i en specifik grupp som filen tillhör
+   o = others => övriga som varken utgör användare eller medlem i en specifik grupp
+
+Kommandot chmod kan som sagt användas både på filer och kataloger. Som exempel,för att ge rättigheter
+till att läsa och köra allt innehåll i katalogen dir1 för alla så kan följande kommando användas:
+----------------------------------------------------------------------------------------------------
+$ sudo chmod a+rx dir1
+----------------------------------------------------------------------------------------------------
+
+Vid behov kan dessa rättigheter tas bort så att enbart super user (sudo) kan läsa och köra innehållet.
+För säkerhets skull kan också läsrättigheterna tas bort, dock bör dessa inte finnas om inte detta
+har getts tidigare via kommandot chmod:
+----------------------------------------------------------------------------------------------------
+$ sudo chmod a-rwx dir1
+----------------------------------------------------------------------------------------------------
+
+Vid behov kan någon annan flagga än a användas, exempelvis för att bara ge aktuell använda rättigheter.
+I sådana fall skall flaggan u (user) anges. Som exempel, om enbart aktuell användare skall få tillgång 
+att enbart läsa innehållet i en katalog döpt dir2, så kan följande kommando användas:
+----------------------------------------------------------------------------------------------------
+$ sudo chmod u+r dir2 # Ger nuvarande användare tillgång att läsa innehållet i katalogen dir2. 
+----------------------------------------------------------------------------------------------------
+
+För att ge användaren rättigheter att skriva en fil döpt thread.c, så kan följande kommando användas:
+----------------------------------------------------------------------------------------------------
+$ sudo chmod u+w thread.c 
+----------------------------------------------------------------------------------------------------
+
+Ett exempel där det kan vara fördelaktigt att använda kommandot chmod är ifall ett shell-script döpt main.sh
+har öppnats i editorn nano som super user (sudo) via nedanstående kommando:
+----------------------------------------------------------------------------------------------------
+$ sudo nano main.sh -l
+----------------------------------------------------------------------------------------------------
+
+Om ovanstående kommando har använts kan endast super user modifiera shell-scriptet som default. 
+Filen är dock läsbar och kan köras via kommandot bash, men går alltså inte att modifiera förutom av 
+super user. Skriptet går alltså att köra utan att vara super user via följande kommando:
+----------------------------------------------------------------------------------------------------
+$ sudo bash main.sh
+----------------------------------------------------------------------------------------------------
+
+Däremot om det andra vanliga kommandot för att köra shell-scriptet används:
+----------------------------------------------------------------------------------------------------
+$ ./main.sh
+----------------------------------------------------------------------------------------------------
+
+så skrivs följande meddelande ut i terminalen:
+----------------------------------------------------------------------------------------------------
+-bash: ./main.sh: Permission denied
+----------------------------------------------------------------------------------------------------
+
+Här kan filrättigheter ges så att filen kan skrivas, läsas samt köras av alla via nedanstående kommando:
+----------------------------------------------------------------------------------------------------
+$ sudo chmod a+rwx main.sh
+----------------------------------------------------------------------------------------------------
+
+Därefter kan filen öppnas samt köras via följande kommandon:
+----------------------------------------------------------------------------------------------------
+$ nano main.sh -l 
+$ ./main.sh
+----------------------------------------------------------------------------------------------------
